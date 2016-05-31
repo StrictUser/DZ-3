@@ -1,0 +1,20 @@
+1) Написать запрос который выведет всех пользователей в возрасте от 20 лет с количеством книг более 5
+SELECT age, COUNT(*) AS book FROM users JOIN users_books ON users.id = users_books.user_id WHERE age > 20 GROUP BY users.id HAVING book > 5
+
+2) Написать запрос который выведет пользователей в имени которых присутствует число 3
+SELECT * FROM users WHERE first_name LIKE '%3%' OR last_name LIKE '%3%'
+
+3) Написать запрос который выведет список пользователей которые не брали книгу с именем "Book #21"
+SELECT first_name FROM users WHERE users.id NOT IN (SELECT user_id FROM users_books ub LEFT JOIN books ON ub.book_id = books.id WHERE books.title = 'Book #21')
+
+4) Написать запрос который добавит поле is_active в таблицу users;
+ALTER TABLE users ADD is_active INT NOT NULL AFTER age;
+
+5) Написать запрос, который проставит is_active = 1 для пользователей, которые взяли как минимум одну книгу
+UPDATE users SET is_active=1 WHERE (SELECT COUNT(*) FROM users_books WHERE users_books.user_id = users.id) > 0
+
+6) Написать запрос который добавит поле isbestseller (bool) в таблицу books
+ALTER TABLE books ADD isbestseller INT NOT NULL AFTER title;
+
+7) Написать запрос который выставит isbestseller = 1 для книг, которые были взяты пользователями более 10 раз
+UPDATE books SET isbestseller=1 WHERE (SELECT COUNT(*) FROM users_books WHERE users_books.book_id = book.id) > 10
